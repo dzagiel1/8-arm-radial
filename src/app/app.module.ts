@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { MaterialModule } from './material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
@@ -14,7 +13,7 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { HomeModule } from './home/home.module';
-import { DetailModule } from './detail/detail.module';
+import { EightArmRadialModule } from './eight-arm-radial/eight-arm-radial.module';
 
 import { AppComponent } from './app.component';
 
@@ -31,9 +30,8 @@ const httpLoaderFactory = (http: HttpClient): TranslateHttpLoader =>
     CoreModule,
     SharedModule,
     HomeModule,
-    DetailModule,
+    EightArmRadialModule,
     AppRoutingModule,
-    MaterialModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {

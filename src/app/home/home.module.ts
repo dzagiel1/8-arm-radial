@@ -5,8 +5,8 @@ import { HomeRoutingModule } from './home-routing.module';
 
 import { HomeComponent } from './home.component';
 import { SharedModule } from '../shared/shared.module';
-import { MaterialModule } from '../material/material.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UiModule } from '../ui/ui.module';
 
 @NgModule({
   declarations: [HomeComponent],
@@ -14,8 +14,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CommonModule,
     SharedModule,
     HomeRoutingModule,
-    MaterialModule,
     BrowserAnimationsModule,
+    UiModule
   ],
 })
 export class HomeModule {}
