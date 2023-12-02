@@ -5,9 +5,17 @@ import { EightArmRadialRoutingModule } from './eight-arm-radial-routing.module';
 
 import { EightArmRadialComponent } from './eight-arm-radial.component';
 import { SharedModule } from '../shared/shared.module';
+import { UiModule } from '../ui/ui.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [EightArmRadialComponent],
-  imports: [CommonModule, SharedModule, EightArmRadialRoutingModule],
+  imports: [
+    CommonModule,
+    SharedModule,
+    EightArmRadialRoutingModule,
+    UiModule,
+    ReactiveFormsModule,
+  ],
 })
 export class EightArmRadialModule {}

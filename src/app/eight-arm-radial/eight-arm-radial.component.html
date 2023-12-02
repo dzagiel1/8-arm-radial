@@ -1,7 +1,78 @@
-<div class="container">
-  <h1 class="title">
-    {{ 'PAGES.DETAIL.TITLE' | translate }}
-  </h1>
-
-  <a routerLink="/">{{ 'PAGES.DETAIL.BACK_TO_HOME' | translate }}</a>
-</div>
+<form [formGroup]="userForm" (ngSubmit)="send(userForm.value)">
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >Name</label
+    >
+    <input
+      type="text"
+      formControlName="name"
+      id="small-input"
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <div *ngFor="let phone of getPhonesFormControls(); let i = index">
+    <div>
+      <label
+        for="small-input"
+        class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >{{ "PAGES.EIGHT_ARM_RADIAL.TRY" | translate }}{{ i + 1 }}
+        <button
+          (click)="removePhone(i)"
+          type="button"
+          class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          <svg
+            class="w-3 h-3 text-white-800 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 18 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 5h16M7 8v8m4-8v8M7 1h4a1 1 0 0 1 1 1v3H6V2a1 1 0 0 1 1-1ZM3 5h12v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5Z"
+            />
+          </svg>
+          <span class="sr-only">Remove</span>
+        </button>
+      </label>
+      <input
+        type="text"
+        [formControl]="phone"
+        id="small-input"
+        class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+      />
+    </div>
+  </div>
+  <br />
+  <button
+    (click)="addPhone()"
+    type="button"
+    class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+  >
+    <svg
+      class="w-3 h-3 text-white-800 dark:text-white"
+      aria-hidden="true"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 20 20"
+    >
+      <path
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 5.757v8.486M5.757 10h8.486M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+    <span class="sr-only">Add</span>
+  </button>
+  <br />
+  <br />
+  <input type="submit" />
+</form>

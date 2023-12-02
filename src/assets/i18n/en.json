@@ -1,15 +1,11 @@
 {
-  "GLOBAL" : {
+  "GLOBAL": {
     "HOME": "Home",
     "EIGHT_ARM_RADIAL": "8 arm radial"
   },
   "PAGES": {
-      "HOME": {
-          "TITLE": "app"
-      },
-      "DETAIL": {
-        "TITLE": "Detail page !",
-        "BACK_TO_HOME": "Back to Home"
+    "EIGHT_ARM_RADIAL": {
+      "TRY": "Try"
     }
   }
 }
