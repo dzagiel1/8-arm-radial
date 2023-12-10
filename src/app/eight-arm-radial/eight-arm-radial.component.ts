@@ -1,3 +1,4 @@
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -5,6 +6,7 @@ import {
   FormBuilder,
   FormGroup,
 } from '@angular/forms';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-eight-arm-radial',
@@ -14,12 +16,24 @@ import {
 export class EightArmRadialComponent implements OnInit {
   userForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(
+    private formBuilder: FormBuilder,
+    private httpClient: HttpClient
+  ) {}
 
   ngOnInit(): void {
     this.userForm = this.formBuilder.group({
       name: [],
       phones: this.formBuilder.array([this.formBuilder.control(null)]),
+    });
+    this.getFileFromApi().pipe(take(1)).subscribe();
+  }
+
+  getFileFromApi(): Observable<HttpResponse<Blob>> {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.httpClient.get<Blob>('http://localhost:3000', {
+      observe: 'response',
+      responseType: 'blob' as 'json',
     });
   }
 
