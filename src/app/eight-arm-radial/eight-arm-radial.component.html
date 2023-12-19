@@ -77,16 +77,21 @@
   <input type="submit" />
 </form>
 <div>
-  <input type="file" #focusElement (change)="onFileAdd($event.target.files)" />
+  <input type="file" #focusElement (change)="onFileAdd($event)" />
 </div>
 <br>
 <div>
-<input type="file" #focusElement (change)="onFileAdd($event.target.files)" />
+<input type="file" #focusElement (change)="onFileAdd($event)" />
 </div>
 <br>
 <div class="row">
-<div class="col-12">
-  <button type="button" (click)="onUpload()">Upload</button>
-  <button type="reset" (click)="onClear()">Clear</button>
+  <div class="col-12">
+    <button type="button" (click)="onUpload()">XLSX upload</button>
+    <!-- <button type="reset" (click)="onClear()">Clear</button> -->
 </div>
 </div>
+<button (click)="getFile()">XLSX download</button>
+<br>
+<br>
+<br>
+{{ res | json}}

@@ -78,7 +78,11 @@ try {
   let express_app = express();
 
   express_app.listen(3000);
-  express_app.use([cors(corsOptions), bodyParser.json()]);
+  express_app.use([
+    cors(corsOptions),
+    bodyParser.urlencoded({ extended: false }),
+    bodyParser.json(),
+  ]);
   // rimraf('./app/tmp', () => {
   //   mkdirp('./app/public/data/temp', (err) => {
   //     if (err) {
@@ -147,7 +151,8 @@ try {
     });
   });
 
-  express_app.get('/', function (req, res) {
+  express_app.post('/test', (req, res) => {
+    console.log(req.body);
     var workbook = new ExcelJS.Workbook();
 
     workbook.creator = 'Me';
@@ -168,22 +173,78 @@ try {
         visibility: 'visible',
       },
     ];
-    var worksheet = workbook.addWorksheet('My Sheet');
+    var worksheet = workbook.addWorksheet('Saline');
     worksheet.columns = [
-      { header: 'Id', key: 'id', width: 10 },
-      { header: 'Name', key: 'name', width: 32 },
-      {
-        header: 'D.O.B.',
-        key: 'dob',
-        width: 10,
-        outlineLevel: 1,
-        type: 'date',
-        formulae: [new Date(2016, 0, 1)],
-      },
+      { header: 'id', key: 'id', width: 15, type: 'text' },
+      { header: 'name', key: 'name', width: 10, type: 'text' },
+      { header: 'time', key: 'time', width: 10, type: 'text' },
+      { header: 'input', key: 'input', width: 10, type: 'text' },
+      { header: 'errors', key: 'errors', width: 10, type: 'number' },
+      { header: 'valid', key: 'valid', width: 10, type: 'number' },
+      { header: 'arm1', key: 'arm1', width: 10, type: 'number' },
+      { header: 'arm2', key: 'arm2', width: 10, type: 'number' },
+      { header: 'arm3', key: 'arm3', width: 10, type: 'number' },
+      { header: 'arm4', key: 'arm4', width: 10, type: 'number' },
+      { header: 'arm5', key: 'arm5', width: 10, type: 'number' },
+      { header: 'arm6', key: 'arm6', width: 10, type: 'number' },
+      { header: 'arm7', key: 'arm7', width: 10, type: 'number' },
+      { header: 'arm8', key: 'arm8', width: 10, type: 'number' },
     ];
 
-    worksheet.addRow({ id: 1, name: 'John Doe', dob: new Date(1970, 1, 1) });
-    worksheet.addRow({ id: 2, name: 'Jane Doe', dob: new Date(1965, 1, 7) });
+    worksheet.addRow({
+      id: '1_1',
+      name: '1T14111',
+      time: '3:10',
+      input: '1122345678',
+      errors: 2,
+      valid: true,
+      arm1: 2,
+      arm2: 2,
+      arm3: 1,
+      arm4: 1,
+      arm5: 1,
+      arm6: 1,
+      arm7: 1,
+      arm8: 1,
+    });
+    worksheet.addRow({
+      id: '1_1',
+      name: '1T14112',
+      time: '4:10',
+      input: '1122345678',
+      errors: 2,
+      valid: true,
+      arm1: 2,
+      arm2: 2,
+      arm3: 1,
+      arm4: 1,
+      arm5: 1,
+      arm6: 1,
+      arm7: 1,
+      arm8: 1,
+    });
+    worksheet.addRow({
+      id: '1_1',
+      name: '1T14113',
+      time: '4:10',
+      input: '1122345678',
+      errors: 2,
+      valid: true,
+      arm1: 2,
+      arm2: 2,
+      arm3: 1,
+      arm4: 1,
+      arm5: 1,
+      arm6: 1,
+      arm7: 1,
+      arm8: 1,
+    });
+    worksheet.addRow({
+      id: '1_1',
+      name: 'average',
+      errors: 2,
+      valid: true,
+    });
 
     res.setHeader(
       'Content-Type',

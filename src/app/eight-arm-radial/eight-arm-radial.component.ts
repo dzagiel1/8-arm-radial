@@ -7,6 +7,8 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { Observable, take } from 'rxjs';
+import { EightArmRadial } from './model/eight-arm-radial.model';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-eight-arm-radial',
@@ -14,7 +16,10 @@ import { Observable, take } from 'rxjs';
   styleUrls: ['./eight-arm-radial.component.scss'],
 })
 export class EightArmRadialComponent implements OnInit {
+  data: EightArmRadial[] = [];
   userForm!: FormGroup;
+  fileUrl: any;
+  res: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,15 +31,31 @@ export class EightArmRadialComponent implements OnInit {
       name: [],
       phones: this.formBuilder.array([this.formBuilder.control(null)]),
     });
-    this.getFileFromApi().pipe(take(1)).subscribe();
+  }
+
+  getFile(): void {
+    this.getFileFromApi().subscribe((res: any) => {
+      this.saveAsBlob(res);
+    });
   }
 
   getFileFromApi(): Observable<HttpResponse<Blob>> {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.httpClient.get<Blob>('http://localhost:3000', {
-      observe: 'response',
-      responseType: 'blob' as 'json',
+    return this.httpClient.post<Blob>(
+      'http://localhost:3000/test',
+      { test: 'test' },
+      {
+        observe: 'response',
+        responseType: 'blob' as 'json',
+      }
+    );
+  }
+
+  private saveAsBlob(data: any) {
+    const blob = new Blob([data.body], { type: 'application/vnd.ms-excel' });
+    const file = new File([blob], '8arm.xlsx', {
+      type: 'application/vnd.ms-excel',
     });
+    saveAs(file);
   }
 
   addPhone(): void {
@@ -74,8 +95,9 @@ export class EightArmRadialComponent implements OnInit {
 
   files: any | Blob = [];
 
-  onFileAdd(files: FileList) {
-    const file = files.item(0);
+  onFileAdd(event: any) {
+    // onFileAdd(files: FileList) {
+    const file = event.target.files.item(0);
     this.files.push(file);
     console.log(file, this.files);
   }
@@ -85,11 +107,12 @@ export class EightArmRadialComponent implements OnInit {
   }
 
   onUpload() {
-    console.log(this.files);
     const formData = new FormData();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     formData.append('file', this.files[0], 'file');
-    this.httpClient.post('http://localhost:3000', formData).subscribe();
-    // console.log(formData)
+    this.httpClient.post('http://localhost:3000', formData).subscribe((res) => {
+      this.res = res;
+      console.log(this.res);
+    });
   }
 }
