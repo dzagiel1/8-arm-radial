@@ -10,7 +10,7 @@ const xlstojson = require('xls-to-json');
 const fileExtension = require('file-extension');
 const rimraf = require('rimraf');
 const { mkdirp } = require('mkdirp');
-const upload = multer({ dest: './app/public/data/temp/' });
+const upload = multer({ dest: './app/tmp/' });
 const ExcelJS = require('exceljs');
 const cors = require('cors');
 
@@ -79,7 +79,7 @@ try {
 
   express_app.listen(3000);
   express_app.use([cors(corsOptions), bodyParser.json()]);
-  // rimraf('./app/public/data/temp/', () => {
+  // rimraf('./app/tmp', () => {
   //   mkdirp('./app/public/data/temp', (err) => {
   //     if (err) {
   //       console.log(err);
@@ -87,12 +87,12 @@ try {
   //   });
   //   console.log('done');
   // });
-  // rimraf.sync('./app/public/data/temp/');
+  // rimraf.sync('./app/tmp');
 
   let storage = multer.diskStorage({
     //multers disk storage settings
     destination: function (req, file, cb) {
-      cb(null, './app/public/data/temp/');
+      cb(null, './app/tmp/');
     },
     filename: function (req, file, cb) {
       crypto.pseudoRandomBytes(16, function (err, raw) {
@@ -133,7 +133,7 @@ try {
       excel2json(
         {
           input: req.file.path,
-          output: './app/public/data/temp/' + Date.now() + '.json', // output json
+          output: './app/tmp/' + Date.now() + '.json', // output json
           lowerCaseHeaders: true,
         },
         (err, result) => {
