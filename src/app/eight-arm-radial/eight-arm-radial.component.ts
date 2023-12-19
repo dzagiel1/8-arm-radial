@@ -71,4 +71,25 @@ export class EightArmRadialComponent implements OnInit {
     });
     console.log(values);
   }
+
+  files: any | Blob = [];
+
+  onFileAdd(files: FileList) {
+    const file = files.item(0);
+    this.files.push(file);
+    console.log(file, this.files);
+  }
+
+  onClear() {
+    this.files = [];
+  }
+
+  onUpload() {
+    console.log(this.files);
+    const formData = new FormData();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    formData.append('file', this.files[0], 'file');
+    this.httpClient.post('http://localhost:3000', formData).subscribe();
+    // console.log(formData)
+  }
 }

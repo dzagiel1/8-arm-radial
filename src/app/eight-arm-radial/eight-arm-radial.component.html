@@ -76,3 +76,17 @@
   <br />
   <input type="submit" />
 </form>
+<div>
+  <input type="file" #focusElement (change)="onFileAdd($event.target.files)" />
+</div>
+<br>
+<div>
+<input type="file" #focusElement (change)="onFileAdd($event.target.files)" />
+</div>
+<br>
+<div class="row">
+<div class="col-12">
+  <button type="button" (click)="onUpload()">Upload</button>
+  <button type="reset" (click)="onClear()">Clear</button>
+</div>
+</div>

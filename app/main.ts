@@ -2,9 +2,17 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 const express = require('express');
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const crypto = require('crypto');
+const xlsxtojson = require('xlsx-to-json');
+const xlstojson = require('xls-to-json');
+const fileExtension = require('file-extension');
+const rimraf = require('rimraf');
+const { mkdirp } = require('mkdirp');
+const upload = multer({ dest: './app/public/data/temp/' });
 const ExcelJS = require('exceljs');
 const cors = require('cors');
-// import { Excel } from 'exceljs';
 
 let win: BrowserWindow | null = null;
 const args = process.argv.slice(1),
@@ -63,16 +71,83 @@ try {
   // Added 400 ms to fix the black background issue while using transparent window. More detais at https://github.com/electron/electron/issues/15947
   app.on('ready', () => setTimeout(createWindow, 400));
 
-  // express init
-  // const expressServer: Express = express();
+  // express app
   let corsOptions = {
     origin: ['http://localhost:4200'],
   };
-  let expressServer = express();
+  let express_app = express();
 
-  expressServer.listen(3000);
-  expressServer.use(cors(corsOptions));
-  expressServer.get('/', function (req, res) {
+  express_app.listen(3000);
+  express_app.use([cors(corsOptions), bodyParser.json()]);
+  // rimraf('./app/public/data/temp/', () => {
+  //   mkdirp('./app/public/data/temp', (err) => {
+  //     if (err) {
+  //       console.log(err);
+  //     }
+  //   });
+  //   console.log('done');
+  // });
+  // rimraf.sync('./app/public/data/temp/');
+
+  let storage = multer.diskStorage({
+    //multers disk storage settings
+    destination: function (req, file, cb) {
+      cb(null, './app/public/data/temp/');
+    },
+    filename: function (req, file, cb) {
+      crypto.pseudoRandomBytes(16, function (err, raw) {
+        cb(
+          null,
+          raw.toString('hex') + Date.now() + '.' + fileExtension(file.mimetype)
+        );
+      });
+    },
+  });
+  const upload = multer({
+    storage: storage,
+  }).single('file');
+
+  express_app.post('/', (req, res) => {
+    let excel2json;
+    upload(req, res, (err) => {
+      if (err) {
+        res.json({ error_code: 401, err_desc: err });
+        return;
+      }
+      if (!req.file) {
+        res.json({ error_code: 404, err_desc: 'File not found!' });
+        return;
+      }
+
+      if (
+        req.file.originalname.split('.')[
+          req.file.originalname.split('.').length - 1
+        ] === 'xlsx'
+      ) {
+        excel2json = xlsxtojson;
+      } else {
+        excel2json = xlstojson;
+      }
+
+      //  code to convert excel data to json  format
+      excel2json(
+        {
+          input: req.file.path,
+          output: './app/public/data/temp/' + Date.now() + '.json', // output json
+          lowerCaseHeaders: true,
+        },
+        (err, result) => {
+          if (err) {
+            res.json(err);
+          } else {
+            res.json(result);
+          }
+        }
+      );
+    });
+  });
+
+  express_app.get('/', function (req, res) {
     var workbook = new ExcelJS.Workbook();
 
     workbook.creator = 'Me';
